@@ -18,31 +18,18 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+const names = ["delivered", "in-progress", "pending"];
 
-export default function StatusFilter() {
-  const [personName, setPersonName] = React.useState([]);
-
+export default function StatusFilter(props) {
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    props.setStatus(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log(personName);
+    console.log(props.status);
   };
 
   return (
@@ -55,7 +42,7 @@ export default function StatusFilter() {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={personName}
+          value={props.status}
           onChange={handleChange}
           input={<OutlinedInput label="Filter By Status" />}
           renderValue={(selected) => selected.join(", ")}
@@ -63,7 +50,7 @@ export default function StatusFilter() {
         >
           {names.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
+              <Checkbox checked={props.status.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}

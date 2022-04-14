@@ -18,27 +18,14 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+const names = ["standard", "high-cube"];
 
-export default function TypeFilter() {
-  const [personName, setPersonName] = React.useState([]);
-
+export default function TypeFilter(props) {
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    props.setType(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -55,7 +42,7 @@ export default function TypeFilter() {
           id="demo-multiple-checkbox"
           multiple
           key="Cool Beans"
-          value={personName}
+          value={props.type}
           onChange={handleChange}
           input={<OutlinedInput label="Filter By Type" />}
           renderValue={(selected) => selected.join(", ")}
@@ -63,7 +50,7 @@ export default function TypeFilter() {
         >
           {names.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
+              <Checkbox checked={props.type.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}

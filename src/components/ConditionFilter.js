@@ -18,27 +18,14 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+const names = ["new", "cargo-worthy", "wind-watertight"];
 
-export default function ConditionFilter() {
-  const [personName, setPersonName] = React.useState([]);
-
+export default function ConditionFilter(props) {
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    props.setCondition(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -54,7 +41,7 @@ export default function ConditionFilter() {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={personName}
+          value={props.condition}
           onChange={handleChange}
           input={<OutlinedInput label="Filter By Condition" />}
           renderValue={(selected) => selected.join(", ")}
@@ -62,7 +49,7 @@ export default function ConditionFilter() {
         >
           {names.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
+              <Checkbox checked={props.condition.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}
