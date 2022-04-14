@@ -22,39 +22,39 @@ function App() {
   const [condition, setCondition] = useState([]);
   const [type, setType] = useState([]);
 
-  const firstFilter = (array) => {
-    if (status.length !== 0) {
-      return array.filter((item) => status.includes(item.status));
-    } else {
-      return array;
-    }
-  };
-
-  const secondFilter = (array) => {
-    if (size.length !== 0) {
-      return array.filter((item) => size.includes(item.size));
-    } else {
-      return array;
-    }
-  };
-
-  const thirdFilter = (array) => {
-    if (condition.length !== 0) {
-      return array.filter((item) => condition.includes(item.condition));
-    } else {
-      return array;
-    }
-  };
-
-  const fourthFilter = (array) => {
-    if (type.length !== 0) {
-      return array.filter((item) => type.includes(item.type));
-    } else {
-      return array;
-    }
-  };
-
   useEffect(() => {
+    const firstFilter = (array) => {
+      if (status.length !== 0) {
+        return array.filter((item) => status.includes(item.status));
+      } else {
+        return array;
+      }
+    };
+
+    const secondFilter = (array) => {
+      if (size.length !== 0) {
+        return array.filter((item) => size.includes(item.size));
+      } else {
+        return array;
+      }
+    };
+
+    const thirdFilter = (array) => {
+      if (condition.length !== 0) {
+        return array.filter((item) => condition.includes(item.condition));
+      } else {
+        return array;
+      }
+    };
+
+    const fourthFilter = (array) => {
+      if (type.length !== 0) {
+        return array.filter((item) => type.includes(item.type));
+      } else {
+        return array;
+      }
+    };
+
     let result = data.orders;
     result = firstFilter(result);
     result = secondFilter(result);
