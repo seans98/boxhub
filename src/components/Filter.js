@@ -18,39 +18,36 @@ const MenuProps = {
   },
 };
 
-const names = ["delivered", "in-progress", "pending"];
-
-export default function StatusFilter(props) {
+export default function Filter(props) {
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    props.setStatus(
+    props.setFilter(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log(props.status);
   };
 
   return (
     <div>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">
-          Filter By Status
+          Filter By {props.text}
         </InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          value={props.status}
+          value={props.filter}
           onChange={handleChange}
-          input={<OutlinedInput label="Filter By Status" />}
+          input={<OutlinedInput label={`Filter By ${props.text}`} />}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {props.dataArray.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={props.status.indexOf(name) > -1} />
+              <Checkbox checked={props.filter.indexOf(name) > -1} />
               <ListItemText primary={name} />
             </MenuItem>
           ))}

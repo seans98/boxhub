@@ -2,11 +2,21 @@ import { useEffect, useState } from "react";
 import data from "./mockData";
 import { Typography, Grid, AppBar } from "@mui/material";
 import BoxCard from "./components/BoxCard";
-import StatusFilter from "./components/StatusFilter";
-import SizeFilter from "./components/SizeFilter";
-import TypeFilter from "./components/TypeFilter";
-import ConditionFilter from "./components/ConditionFilter";
+import Filter from "./components/Filter";
+
 function App() {
+  const [originalData, setOriginalData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [status, setStatus] = useState([]);
+  const [size, setSize] = useState([]);
+  const [condition, setCondition] = useState([]);
+  const [type, setType] = useState([]);
+
+  const sizeArray = ["20ft", "40ft", "45ft"];
+  const statusArray = ["delivered", "in-progress", "pending"];
+  const conditionArray = ["new", "cargo-worthy", "wind-watertight"];
+  const typeArray = ["standard", "high-cube"];
+
   data.orders.sort(function (a, b) {
     var keyA = new Date(a.created),
       keyB = new Date(b.created);
@@ -16,11 +26,23 @@ function App() {
     return 0;
   });
 
-  const [filteredData, setFilteredData] = useState(data.orders);
-  const [status, setStatus] = useState([]);
-  const [size, setSize] = useState([]);
-  const [condition, setCondition] = useState([]);
-  const [type, setType] = useState([]);
+  useEffect(() => {
+    const url = "http://localhost:8080/api/crates";
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        data.sort(function (a, b) {
+          var keyA = new Date(a.created),
+            keyB = new Date(b.created);
+          // Compare the 2 dates
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        });
+        console.log(data);
+        setOriginalData(data);
+      });
+  }, []);
 
   useEffect(() => {
     const firstFilter = (array) => {
@@ -55,13 +77,13 @@ function App() {
       }
     };
 
-    let result = data.orders;
+    let result = originalData;
     result = firstFilter(result);
     result = secondFilter(result);
     result = thirdFilter(result);
     result = fourthFilter(result);
     setFilteredData(result);
-  }, [status, size, condition, type]);
+  }, [status, size, condition, type, originalData]);
   return (
     <>
       <AppBar position="static" sx={{ mb: 3 }}>
@@ -69,16 +91,36 @@ function App() {
       </AppBar>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={3}>
-          <StatusFilter status={status} setStatus={setStatus} />
+          <Filter
+            filter={status}
+            setFilter={setStatus}
+            dataArray={statusArray}
+            text="Status"
+          />
         </Grid>
         <Grid item xs={12} sm={3}>
-          <SizeFilter size={size} setSize={setSize} />
+          <Filter
+            filter={size}
+            setFilter={setSize}
+            dataArray={sizeArray}
+            text="Size"
+          />
         </Grid>
         <Grid item xs={12} sm={3}>
-          <TypeFilter type={type} setType={setType} />
+          <Filter
+            filter={type}
+            setFilter={setType}
+            dataArray={typeArray}
+            text="Type"
+          />
         </Grid>
         <Grid item xs={12} sm={3}>
-          <ConditionFilter condition={condition} setCondition={setCondition} />
+          <Filter
+            filter={condition}
+            setFilter={setCondition}
+            dataArray={conditionArray}
+            text="Condition"
+          />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
